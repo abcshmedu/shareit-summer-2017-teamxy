@@ -31,7 +31,6 @@ public class Medium {
         Medium medium = (Medium) o;
 
         return title.equals(medium.title);
-
     }
 
     @Override
