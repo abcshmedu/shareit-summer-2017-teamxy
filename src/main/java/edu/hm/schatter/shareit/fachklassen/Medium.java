@@ -1,4 +1,4 @@
-package edu.hm.fachklassen;
+package edu.hm.schatter.shareit.fachklassen;
 
 public class Medium {
     private final String title;

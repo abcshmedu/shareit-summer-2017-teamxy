@@ -1,4 +1,4 @@
-package edu.hm.fachklassen;
+package edu.hm.schatter.shareit.fachklassen;
 
 public class Disc {
     private final String barcode;
