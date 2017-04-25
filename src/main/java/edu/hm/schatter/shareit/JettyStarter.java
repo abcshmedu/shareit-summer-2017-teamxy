@@ -8,6 +8,7 @@ import org.eclipse.jetty.webapp.*;
  * @author <a mailto:axel.boettcher@hm.edu>Axel B&ouml;ttcher</a>
  *
  */
+//CHECKSTYLE:OFF
 public class JettyStarter {
 
     public static final String APP_URL = "/";

@@ -1,6 +1,6 @@
 package edu.hm.schatter.shareit.models;
 
-public class Disc extends Medium{
+public class Disc extends Medium {
     private final String barcode;
     private final String director;
     private final int fsk;
@@ -15,11 +15,11 @@ public class Disc extends Medium{
     public Disc(String title, String barcode, String director, int fsk) {
         super(title);
 
-        if (barcode == null){
+        if (barcode == null) {
             throw new IllegalArgumentException("barcode must not be null");
         }
 
-        if (director == null){
+        if (director == null) {
             throw new IllegalArgumentException("director must not be null");
         }
 
@@ -42,13 +42,21 @@ public class Disc extends Medium{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Disc disc = (Disc) o;
 
-        if (fsk != disc.fsk) return false;
-        if (!barcode.equals(disc.barcode)) return false;
+        if (fsk != disc.fsk) {
+            return false;
+        }
+        if (!barcode.equals(disc.barcode)) {
+            return false;
+        }
         return director.equals(disc.director);
 
     }

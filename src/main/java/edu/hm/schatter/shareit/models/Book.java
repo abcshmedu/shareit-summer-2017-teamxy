@@ -1,6 +1,6 @@
 package edu.hm.schatter.shareit.models;
 
-public class Book extends Medium{
+public class Book extends Medium {
     private final String author;
     private final String isbn;
 
@@ -13,11 +13,11 @@ public class Book extends Medium{
     public Book(String title, String author, String isbn) {
         super(title);
 
-        if (author == null){
+        if (author == null) {
             throw new IllegalArgumentException("author must not be null");
         }
 
-        if (isbn == null){
+        if (isbn == null) {
             throw new IllegalArgumentException("isbn must not be null");
         }
 
@@ -35,12 +35,18 @@ public class Book extends Medium{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Book book = (Book) o;
 
-        if (!author.equals(book.author)) return false;
+        if (!author.equals(book.author)) {
+            return false;
+        }
         return isbn.equals(book.isbn);
 
     }

@@ -5,11 +5,11 @@ public class Copy {
     private final String owner;
 
     public Copy(Medium medium, String owner) {
-        if (medium == null){
+        if (medium == null) {
             throw new IllegalArgumentException("medium must not be null");
         }
 
-        if (owner == null){
+        if (owner == null) {
             throw new IllegalArgumentException("owner must not be null");
         }
 
