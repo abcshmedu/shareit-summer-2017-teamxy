@@ -6,11 +6,11 @@ public class Copy {
 
     public Copy(Medium medium, String owner) {
         if (medium == null){
-            throw new IllegalArgumentException("must not be null");
+            throw new IllegalArgumentException("medium must not be null");
         }
 
         if (owner == null){
-            throw new IllegalArgumentException("must not be null");
+            throw new IllegalArgumentException("owner must not be null");
         }
 
         this.medium = medium;

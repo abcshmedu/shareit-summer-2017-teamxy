@@ -16,7 +16,7 @@ public class Medium {
 
     @Override
     public String toString() {
-        return "Medium{" + "title='" + title + '\'' + '}';
+        return "Medium{title='" + title + '\'' + '}';
     }
 
     @Override
