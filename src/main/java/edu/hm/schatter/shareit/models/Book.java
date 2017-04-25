@@ -1,4 +1,4 @@
-package edu.hm.schatter.shareit.fachklassen;
+package edu.hm.schatter.shareit.models;
 
 public class Book extends Medium{
     private final String author;

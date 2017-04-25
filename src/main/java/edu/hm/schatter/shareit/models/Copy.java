@@ -1,4 +1,4 @@
-package edu.hm.schatter.shareit.fachklassen;
+package edu.hm.schatter.shareit.models;
 
 public class Copy {
     private final Medium medium;

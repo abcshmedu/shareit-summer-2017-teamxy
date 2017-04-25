@@ -1,4 +1,4 @@
-package edu.hm.schatter.shareit.fachklassen;
+package edu.hm.schatter.shareit.models;
 
 public abstract class Medium {
     private final String title;

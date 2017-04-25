@@ -1,4 +1,4 @@
-package edu.hm.schatter.shareit.fachklassen;
+package edu.hm.schatter.shareit.models;
 
 public class Disc extends Medium{
     private final String barcode;
