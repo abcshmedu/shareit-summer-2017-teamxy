@@ -1,15 +1,18 @@
 package edu.hm.schatter.shareit.fachklassen;
 
-public class Book {
+public class Book extends Medium{
     private final String author;
     private final String isbn;
 
     private Book() {
+        super("");
         author = "";
         isbn = "";
     }
 
-    public Book(String author, String isbn) {
+    public Book(String title, String author, String isbn) {
+        super(title);
+
         if (author == null){
             throw new IllegalArgumentException("author must not be null");
         }

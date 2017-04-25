@@ -1,6 +1,6 @@
 package edu.hm.schatter.shareit.fachklassen;
 
-public class Medium {
+public abstract class Medium {
     private final String title;
 
     public Medium(String title) {

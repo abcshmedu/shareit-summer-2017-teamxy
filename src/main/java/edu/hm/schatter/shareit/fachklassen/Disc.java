@@ -1,17 +1,20 @@
 package edu.hm.schatter.shareit.fachklassen;
 
-public class Disc {
+public class Disc extends Medium{
     private final String barcode;
     private final String director;
     private final int fsk;
 
     private Disc() {
+        super("");
         barcode = "";
         director = "";
         fsk = 0;
     }
 
-    public Disc(String barcode, String director, int fsk) {
+    public Disc(String title, String barcode, String director, int fsk) {
+        super(title);
+
         if (barcode == null){
             throw new IllegalArgumentException("barcode must not be null");
         }
