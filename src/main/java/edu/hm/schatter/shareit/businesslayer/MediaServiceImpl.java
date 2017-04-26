@@ -15,12 +15,16 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addBook(Book book) {
         final MediaServiceResult result;
 
-        // prüfen ob buch valid ist
+        if (book.getAuthor().equals("") || book.getTitle().equals("")) {
+            result = MediaServiceResult.INVALID_INFORMATION;
 
-        // prüfen ob buch schon vorhanden ist
+        } else if (doesISBNexist(book.getIsbn())) {
+            result = MediaServiceResult.ALREADY_EXISTS;
 
-        BOOKS.add(book);
-        result = MediaServiceResult.OK;
+        } else {
+            BOOKS.add(book);
+            result = MediaServiceResult.OK;
+        }
 
         return result;
     }
@@ -29,12 +33,16 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addDisc(Disc disc) {
         final MediaServiceResult result;
 
-        // prüfen ob disc valid ist
+        if (disc.getDirector().equals("") || disc.getTitle().equals("") || disc.getFsk() < 0 || disc.getFsk() > 18) {
+            result = MediaServiceResult.INVALID_INFORMATION;
 
-        // prüfen ob disc schon vorhanden ist
+        } else if (doesBarcodeExist(disc.getBarcode())) {
+            result = MediaServiceResult.ALREADY_EXISTS;
 
-        DISCS.add(disc);
-        result = MediaServiceResult.OK;
+        } else {
+            DISCS.add(disc);
+            result = MediaServiceResult.OK;
+        }
 
         return result;
     }
@@ -57,5 +65,31 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public MediaServiceResult updateDisc(Disc disc) {
         return null;
+    }
+
+    private boolean doesISBNexist(String isbn) {
+        boolean isbnExists = false;
+
+        for (Book book : BOOKS) {
+            if (book.getIsbn().equals(isbn)) {
+                isbnExists = true;
+                break;
+            }
+        }
+
+        return isbnExists;
+    }
+
+    private boolean doesBarcodeExist(String barcode) {
+        boolean barcodeExists = false;
+
+        for (Disc disc : DISCS) {
+            if (disc.getBarcode().equals(barcode)) {
+                barcodeExists = true;
+                break;
+            }
+        }
+
+        return barcodeExists;
     }
 }
