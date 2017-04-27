@@ -13,7 +13,7 @@ public interface MediaService {
 
     public Disc[] getDiscs();
 
-    public MediaServiceResult updateBook(Book book);
+    public MediaServiceResult updateBook(String isbn, Book book);
 
     public MediaServiceResult updateDisc(Disc disc);
 }

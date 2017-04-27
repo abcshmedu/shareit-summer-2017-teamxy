@@ -35,14 +35,16 @@ public class MediaRessource {
     }
 
     @PUT
-    @Path("/books")
+    @Path("/books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateBook(Book book) {
+    public Response updateBook(Book book, @PathParam("isbn")String isbn) {
+
+        MediaServiceResult result = mediaService.updateBook(isbn, book);
 
         return Response
-                .status(Response.Status.OK)
-                .entity("json")
+                .status(result.getStatus())
+                .entity(result.getJSON())
                 .build();
     }
 

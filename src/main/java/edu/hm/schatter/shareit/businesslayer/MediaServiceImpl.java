@@ -58,7 +58,38 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public MediaServiceResult updateBook(Book book) {
+    public MediaServiceResult updateBook(String isbn, Book book) {
+        final MediaServiceResult result;
+        final Book bookToBeUpdated = getBookByISBN(isbn);
+
+        if (!book.getIsbn().equals("")) {
+            result = MediaServiceResult.INVALID_INFORMATION;
+
+        } else if (bookToBeUpdated == null) {
+            result = MediaServiceResult.NOT_FOUND;
+
+        } else if (book.getAuthor().equals("") || book.getTitle().equals("")) {
+            result = MediaServiceResult.MISSING_INFORMATION;
+
+        } else if (bookToBeUpdated.getTitle().equals(book.getTitle())
+                && bookToBeUpdated.getAuthor().equals(book.getAuthor())) {
+            result = MediaServiceResult.ALREADY_EXISTS;
+
+        } else {
+            BOOKS.remove(bookToBeUpdated);
+            BOOKS.add(new Book(book.getTitle(), book.getAuthor(), isbn));
+            result = MediaServiceResult.OK;
+        }
+
+        return result;
+    }
+
+    private Book getBookByISBN(String isbn) {
+        for (Book book : BOOKS) {
+            if (book.getIsbn().equals(isbn)) {
+                return book;
+            }
+        }
         return null;
     }
 
