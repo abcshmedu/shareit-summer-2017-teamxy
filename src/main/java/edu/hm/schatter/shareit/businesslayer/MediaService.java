@@ -5,15 +5,19 @@ import edu.hm.schatter.shareit.models.Disc;
 
 public interface MediaService {
 
-    public MediaServiceResult addBook(Book book);
+    MediaServiceResult addBook(Book book);
 
-    public MediaServiceResult addDisc(Disc disc);
+    MediaServiceResult addDisc(Disc disc);
 
-    public Book[] getBooks();
+    Book[] getBooks();
 
-    public Disc[] getDiscs();
+    Disc[] getDiscs();
 
-    public MediaServiceResult updateBook(String isbn, Book book);
+    MediaServiceResult updateBook(String isbn, Book book);
 
-    public MediaServiceResult updateDisc(Disc disc);
+    MediaServiceResult updateDisc(String barcode, Disc disc);
+
+    Book getBookByISBN(String isbn);
+
+    Disc getDiscByBarcode(String barcode);
 }

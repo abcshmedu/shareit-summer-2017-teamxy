@@ -62,7 +62,7 @@ public class MediaServiceImpl implements MediaService {
         final MediaServiceResult result;
         final Book bookToBeUpdated = getBookByISBN(isbn);
 
-        if (!book.getIsbn().equals("")) {
+        if (!book.getIsbn().equals(isbn)) {
             result = MediaServiceResult.INVALID_INFORMATION;
 
         } else if (bookToBeUpdated == null) {
@@ -84,7 +84,35 @@ public class MediaServiceImpl implements MediaService {
         return result;
     }
 
-    private Book getBookByISBN(String isbn) {
+    @Override
+    public MediaServiceResult updateDisc(String barcode, Disc disc) {
+        final MediaServiceResult result;
+        final Disc discToBeUpdated = getDiscByBarcode(barcode);
+
+        if (!disc.getBarcode().equals(barcode) || !disc.hasValidFSK()) {
+            result = MediaServiceResult.INVALID_INFORMATION;
+
+        } else if (discToBeUpdated == null) {
+            result = MediaServiceResult.NOT_FOUND;
+
+        } else if (disc.getDirector().equals("") || disc.getTitle().equals("")) {
+            result = MediaServiceResult.MISSING_INFORMATION;
+
+        } else if (discToBeUpdated.getTitle().equals(disc.getTitle())
+                && discToBeUpdated.getDirector().equals(disc.getDirector())
+                && discToBeUpdated.getFsk() == disc.getFsk()) {
+            result = MediaServiceResult.ALREADY_EXISTS;
+
+        } else {
+            DISCS.remove(discToBeUpdated);
+            DISCS.add(new Disc(disc.getTitle(), barcode, disc.getDirector(), disc.getFsk()));
+            result = MediaServiceResult.OK;
+        }
+
+        return result;
+    }
+
+    public Book getBookByISBN(String isbn) {
         for (Book book : BOOKS) {
             if (book.getIsbn().equals(isbn)) {
                 return book;
@@ -93,34 +121,20 @@ public class MediaServiceImpl implements MediaService {
         return null;
     }
 
-    @Override
-    public MediaServiceResult updateDisc(Disc disc) {
+    public Disc getDiscByBarcode(String barcode) {
+        for (Disc disc : DISCS) {
+            if (disc.getBarcode().equals(barcode)) {
+                return disc;
+            }
+        }
         return null;
     }
 
     private boolean doesISBNexist(String isbn) {
-        boolean isbnExists = false;
-
-        for (Book book : BOOKS) {
-            if (book.getIsbn().equals(isbn)) {
-                isbnExists = true;
-                break;
-            }
-        }
-
-        return isbnExists;
+        return getBookByISBN(isbn) != null;
     }
 
     private boolean doesBarcodeExist(String barcode) {
-        boolean barcodeExists = false;
-
-        for (Disc disc : DISCS) {
-            if (disc.getBarcode().equals(barcode)) {
-                barcodeExists = true;
-                break;
-            }
-        }
-
-        return barcodeExists;
+        return getDiscByBarcode(barcode) != null;
     }
 }

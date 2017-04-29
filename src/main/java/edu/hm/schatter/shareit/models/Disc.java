@@ -1,6 +1,9 @@
 package edu.hm.schatter.shareit.models;
 
 public class Disc extends Medium {
+    private final static int MIN_FSK = 0;
+    private final static int MAX_FSK = 18;
+
     private final String barcode;
     private final String director;
     private final int fsk;
@@ -23,6 +26,10 @@ public class Disc extends Medium {
             throw new IllegalArgumentException("director must not be null");
         }
 
+        if (!isValidFSK(fsk)) {
+            throw new IllegalArgumentException("fsk must be between 0 and 18");
+        }
+
         this.barcode = barcode;
         this.director = director;
         this.fsk = fsk;
@@ -38,6 +45,14 @@ public class Disc extends Medium {
 
     public int getFsk() {
         return fsk;
+    }
+
+    public boolean hasValidFSK() {
+        return isValidFSK(fsk);
+    }
+
+    private boolean isValidFSK(int fsk) {
+        return fsk <= MAX_FSK && fsk >= MIN_FSK;
     }
 
     @Override
