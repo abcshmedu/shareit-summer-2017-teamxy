@@ -15,11 +15,6 @@ public abstract class Medium {
     }
 
     @Override
-    public String toString() {
-        return "Medium{title='" + title + '\'' + '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

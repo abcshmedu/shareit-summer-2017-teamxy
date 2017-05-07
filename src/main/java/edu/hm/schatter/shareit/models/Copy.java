@@ -24,4 +24,23 @@ public class Copy {
     public String getUsername() {
         return owner;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Copy copy = (Copy) o;
+
+        if (!medium.equals(copy.medium)) return false;
+        return owner.equals(copy.owner);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = medium.hashCode();
+        result = 31 * result + owner.hashCode();
+        return result;
+    }
 }

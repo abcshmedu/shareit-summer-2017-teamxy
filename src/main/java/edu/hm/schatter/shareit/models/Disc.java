@@ -57,10 +57,14 @@ public class Disc extends Medium {
 
     @Override
     public boolean equals(Object o) {
+        if (!super.equals(o)) {
+            return false;
+        }
+
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (getClass() != o.getClass()) {
             return false;
         }
 
@@ -82,10 +86,5 @@ public class Disc extends Medium {
         result = 31 * result + director.hashCode();
         result = 31 * result + fsk;
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Disc{barcode='" + barcode + '\'' + ", director='" + director + '\'' + ", fsk=" + fsk + '}';
     }
 }

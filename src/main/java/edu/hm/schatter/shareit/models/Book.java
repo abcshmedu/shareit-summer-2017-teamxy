@@ -35,10 +35,14 @@ public class Book extends Medium {
 
     @Override
     public boolean equals(Object o) {
+        if (!super.equals(o)) {
+            return false;
+        }
+
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (getClass() != o.getClass()) {
             return false;
         }
 
@@ -56,10 +60,5 @@ public class Book extends Medium {
         int result = author.hashCode();
         result = 31 * result + isbn.hashCode();
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{author='" + author + '\'' + ", isbn='" + isbn + '\'' + '}';
     }
 }
