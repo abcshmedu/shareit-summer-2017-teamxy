@@ -6,6 +6,9 @@ import edu.hm.schatter.shareit.models.Disc;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation for the media service interface.
+ */
 public class MediaServiceImpl implements MediaService {
 
     private static final List<Book> BOOKS = new ArrayList<>();
@@ -47,6 +50,11 @@ public class MediaServiceImpl implements MediaService {
         return result;
     }
 
+    /**
+     * Checks whether a disc has valid information. Invalid FSK can occur in reflection-built instances.
+     * @param disc The disc that is checked.
+     * @return Whether the disc has valid information.
+     */
     private boolean discHasValidInformation(Disc disc) {
         return !disc.getDirector().equals("") && !disc.getTitle().equals("")
                 && disc.getFsk() >= Disc.MIN_FSK && disc.getFsk() <= Disc.MAX_FSK;
@@ -137,14 +145,27 @@ public class MediaServiceImpl implements MediaService {
         return null;
     }
 
+    /**
+     * Checks whether an ISBN exists in the current book pool.
+     * @param isbn The ISBN which is checked.
+     * @return Whether the ISBN exists.
+     */
     private boolean doesISBNexist(String isbn) {
         return getBookByISBN(isbn) != null;
     }
 
+    /**
+     * Checks whether a barcode exists in the current disc pool.
+     * @param barcode The barcode which is checked.
+     * @return Whether the barcode exists.
+     */
     private boolean doesBarcodeExist(String barcode) {
         return getDiscByBarcode(barcode) != null;
     }
 
+    /**
+     * Resets the storage. Needed for testing.
+     */
     void resetStorage() {
         BOOKS.clear();
         DISCS.clear();

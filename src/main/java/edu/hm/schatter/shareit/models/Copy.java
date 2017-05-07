@@ -1,9 +1,17 @@
 package edu.hm.schatter.shareit.models;
 
+/**
+ * A copy is a data structure which holds the information of which person is owning a medium at the moment.
+ */
 public class Copy {
     private final Medium medium;
     private final String owner;
 
+    /**
+     * Standard constructor.
+     * @param medium The medium.
+     * @param owner The owner of the medium.
+     */
     public Copy(Medium medium, String owner) {
         if (medium == null) {
             throw new IllegalArgumentException("medium must not be null");
@@ -17,10 +25,18 @@ public class Copy {
         this.owner = owner;
     }
 
+    /**
+     * Getter.
+     * @return The medium.
+     */
     public Medium getMedium() {
         return medium;
     }
 
+    /**
+     * Getter.
+     * @return Username of the owner.
+     */
     public String getUsername() {
         return owner;
     }

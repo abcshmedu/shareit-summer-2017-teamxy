@@ -1,5 +1,8 @@
 package edu.hm.schatter.shareit.models;
 
+/**
+ * A data structure representing a disc.
+ */
 public class Disc extends Medium {
     public static final int MIN_FSK = 0;
     public static final int MAX_FSK = 18;
@@ -8,6 +11,9 @@ public class Disc extends Medium {
     private final String director;
     private final int fsk;
 
+    /**
+     * Private standard constructor needed for reflection.
+     */
     private Disc() {
         super("");
         barcode = "";
@@ -15,6 +21,13 @@ public class Disc extends Medium {
         fsk = 0;
     }
 
+    /**
+     * Standard constructor.
+     * @param title The title of the disc.
+     * @param barcode The barcode of the disc.
+     * @param director The director of the disc.
+     * @param fsk The fsk of the disc. Must be in between MIN_FSK and MAX_FSK.
+     */
     public Disc(String title, String barcode, String director, int fsk) {
         super(title);
 
@@ -35,22 +48,41 @@ public class Disc extends Medium {
         this.fsk = fsk;
     }
 
+    /**
+     * Getter.
+     * @return The barcode of the disc.
+     */
     public String getBarcode() {
         return barcode;
     }
-
+    /**
+     * Getter.
+     * @return The director of the disc.
+     */
     public String getDirector() {
         return director;
     }
-
+    /**
+     * Getter.
+     * @return The fsk of the disc.
+     */
     public int getFsk() {
         return fsk;
     }
 
+    /**
+     * Checks whether the disc has a valid fsk. (Invalid fsks can occur in reflection-built instances)
+     * @return Whether the fsk of the disc is valid.
+     */
     public boolean hasValidFSK() {
         return isValidFSK(fsk);
     }
 
+    /**
+     * Checks whether a fsk is valid.
+     * @param fsk The fsk to be checked.
+     * @return Whether fsk is valid.
+     */
     private boolean isValidFSK(int fsk) {
         return fsk <= MAX_FSK && fsk >= MIN_FSK;
     }

@@ -1,15 +1,27 @@
 package edu.hm.schatter.shareit.models;
 
+/**
+ * A data structure representing a book.
+ */
 public class Book extends Medium {
     private final String author;
     private final String isbn;
 
+    /**
+     * Private standard constructor needed for reflection.
+     */
     private Book() {
         super("");
         author = "";
         isbn = "";
     }
 
+    /**
+     * Standard constructor.
+     * @param title The title of the book.
+     * @param author The author of the book.
+     * @param isbn The isbn of the book.
+     */
     public Book(String title, String author, String isbn) {
         super(title);
 
@@ -25,10 +37,18 @@ public class Book extends Medium {
         this.isbn = isbn;
     }
 
+    /**
+     * Getter.
+     * @return Author of the book.
+     */
     public String getAuthor() {
         return author;
     }
 
+    /**
+     * Getter.
+     * @return ISBN of the book.
+     */
     public String getIsbn() {
         return isbn;
     }

@@ -18,11 +18,19 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Provides the API for the share it service.
+ */
 @Path("/media")
 public class MediaRessource {
 
     private final MediaService mediaService = new MediaServiceImpl();
 
+    /**
+     * Provides the API call for creating a book via a POST parameter.
+     * @param book The book that is created. Built from JSON.
+     * @return Response containing further information on the success of the procedure.
+     */
     @POST
     @Path("/books")
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,6 +45,12 @@ public class MediaRessource {
                 .build();
     }
 
+    /**
+     * Provides the API call for updating a book via a PUT parameter.
+     * @param book The book containing the updated information. Built from JSON.
+     * @param isbn The isbn of the book to be updated.
+     * @return Response containing further information on the success of the procedure.
+     */
     @PUT
     @Path("/books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,6 +65,11 @@ public class MediaRessource {
                 .build();
     }
 
+    /**
+     * Provides the API call for listing all the books currently available in the system.
+     * @return Response containing further information on the success of the procedure
+     * including a JSON array of all books available in the system.
+     */
     @GET
     @Path("/books")
     @Produces(MediaType.APPLICATION_JSON)
@@ -72,6 +91,12 @@ public class MediaRessource {
                 .build();
     }
 
+    /**
+     * Provides the API call for getting the JSON of a specific book.
+     * @param isbn The isbn identifying the book.
+     * @return Response containing further information on the success of the procedure
+     * including the data of the book in JSON format.
+     */
     @GET
     @Path("/books/{isbn}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -96,6 +121,12 @@ public class MediaRessource {
                 .build();
     }
 
+    /**
+     * Provides the API call for getting the JSON of a specific disc.
+     * @param barcode The barcode identifying the disc.
+     * @return Response containing further information on the success of the procedure
+     * including the data of the disc in JSON format.
+     */
     @GET
     @Path("/discs/{barcode}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -120,6 +151,11 @@ public class MediaRessource {
                 .build();
     }
 
+    /**
+     * Provides the API call for listing all the discs currently available in the system.
+     * @return Response containing further information on the success of the procedure
+     * including a JSON array of all discs available in the system.
+     */
     @GET
     @Path("/discs")
     @Produces(MediaType.APPLICATION_JSON)
@@ -142,6 +178,11 @@ public class MediaRessource {
                 .build();
     }
 
+    /**
+     * Provides the API call for creating a disc via a POST parameter.
+     * @param disc The disc that is created. Built from JSON.
+     * @return Response containing further information on the success of the procedure.
+     */
     @POST
     @Path("/discs")
     @Produces(MediaType.APPLICATION_JSON)
@@ -155,6 +196,12 @@ public class MediaRessource {
                 .build();
     }
 
+    /**
+     * Provides the API call for updating a disc via a PUT parameter.
+     * @param disc The disc containing the updated information. Built from JSON.
+     * @param barcode The barcode of the book to be updated.
+     * @return Response containing further information on the success of the procedure.
+     */
     @PUT
     @Path("/discs/{barcode}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -168,6 +215,12 @@ public class MediaRessource {
                 .build();
     }
 
+    /**
+     * Converts objects to json.
+     * @param o object to be converted.
+     * @return json.
+     * @throws JsonProcessingException object could not be converted to json.
+     */
     private String convertToJSON(Object o) throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(o);
     }

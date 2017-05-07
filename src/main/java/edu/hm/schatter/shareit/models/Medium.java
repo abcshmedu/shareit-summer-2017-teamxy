@@ -1,8 +1,15 @@
 package edu.hm.schatter.shareit.models;
 
+/**
+ * Data strucutre representing a medium.
+ */
 public abstract class Medium {
     private final String title;
 
+    /**
+     * Standard constructor.
+     * @param title The title of the medium.
+     */
     public Medium(String title) {
         if (title == null) {
             throw new IllegalArgumentException("Title must not be null");
@@ -10,6 +17,10 @@ public abstract class Medium {
         this.title = title;
     }
 
+    /**
+     * Getter.
+     * @return The title of the medium.
+     */
     public String getTitle() {
         return title;
     }
