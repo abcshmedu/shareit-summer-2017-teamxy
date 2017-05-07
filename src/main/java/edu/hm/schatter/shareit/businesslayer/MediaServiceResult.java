@@ -58,6 +58,6 @@ public enum MediaServiceResult {
      * @return JSON message of the error code.
      */
     public String getJSON() {
-        return "{\"code\": " + code + ", \"message\": \"" + message + "\"}";
+        return "{\"code\": " + code + ", \"detail\": \"" + message + "\"}";
     }
 }
