@@ -33,7 +33,7 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addDisc(Disc disc) {
         final MediaServiceResult result;
 
-        if (disc.getDirector().equals("") || disc.getTitle().equals("") || disc.getFsk() < 0 || disc.getFsk() > 18) {
+        if (!discHasValidInformation(disc)) {
             result = MediaServiceResult.INVALID_INFORMATION;
 
         } else if (doesBarcodeExist(disc.getBarcode())) {
@@ -45,6 +45,11 @@ public class MediaServiceImpl implements MediaService {
         }
 
         return result;
+    }
+
+    private boolean discHasValidInformation(Disc disc) {
+        return !disc.getDirector().equals("") && !disc.getTitle().equals("")
+                && disc.getFsk() >= Disc.MIN_FSK && disc.getFsk() <= Disc.MAX_FSK;
     }
 
     @Override
@@ -112,6 +117,7 @@ public class MediaServiceImpl implements MediaService {
         return result;
     }
 
+    @Override
     public Book getBookByISBN(String isbn) {
         for (Book book : BOOKS) {
             if (book.getIsbn().equals(isbn)) {
@@ -121,6 +127,7 @@ public class MediaServiceImpl implements MediaService {
         return null;
     }
 
+    @Override
     public Disc getDiscByBarcode(String barcode) {
         for (Disc disc : DISCS) {
             if (disc.getBarcode().equals(barcode)) {
@@ -136,5 +143,10 @@ public class MediaServiceImpl implements MediaService {
 
     private boolean doesBarcodeExist(String barcode) {
         return getDiscByBarcode(barcode) != null;
+    }
+
+    void resetStorage() {
+        BOOKS.clear();
+        DISCS.clear();
     }
 }

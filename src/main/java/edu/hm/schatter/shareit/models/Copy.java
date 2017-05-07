@@ -27,12 +27,18 @@ public class Copy {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Copy copy = (Copy) o;
 
-        if (!medium.equals(copy.medium)) return false;
+        if (!medium.equals(copy.medium)) {
+            return false;
+        }
         return owner.equals(copy.owner);
 
     }

@@ -1,8 +1,8 @@
 package edu.hm.schatter.shareit.models;
 
 public class Disc extends Medium {
-    private final static int MIN_FSK = 0;
-    private final static int MAX_FSK = 18;
+    public static final int MIN_FSK = 0;
+    public static final int MAX_FSK = 18;
 
     private final String barcode;
     private final String director;
