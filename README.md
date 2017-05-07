@@ -1,23 +1,22 @@
-# Starter Code für 2. Pratkikumsaufgabe Software-Architektur Sommer 2017
+## 2. Pratkikumsaufgabe Software-Architektur Sommer 2017
 
-Sven Schatter
+- Author: Sven Schatter
 
-[heroku-app](https://shareit-teamxy.herokuapp.com/)
+- [Heroku-App](https://shareit-teamxy.herokuapp.com/)
 
 ## API Usage
 
 URI | Method | Wirkung
 --- | --- | ---
-/media/books | POST | Create a new book.
-/media/books/{isbn} | GET | Get a JSON reprentation of a certain book.
-/media/books | GET | List all books in a JSON array.
-/media/books/{isbn} | PUT | Update an existing book. (JSON only contains the data that is new, as well as the isbn)
+/shareit/media/books | POST | Create a new book.
+/shareit/media/books/{isbn} | GET | Get a JSON reprentation of a certain book.
+/shareit/media/books | GET | List all books in a JSON array.
+/shareit/media/books/{isbn} | PUT | Update an existing book. (JSON only contains the data that is new, as well as the isbn)
  |  |
- |  |
-/media/discs | POST | Create a new disc.
-/media/discs/{barcode} | GET | Get a JSON reprentation of a certain disc.
-/media/discs | GET | List all discs in a JSON array.
-/media/discs/{barcode} | PUT | Update an existing disc. (JSON only contains the data that is new, as well as the barcade)
+/shareit/media/discs | POST | Create a new disc.
+/shareit/media/discs/{barcode} | GET | Get a JSON reprentation of a certain disc.
+/shareit/media/discs | GET | List all discs in a JSON array.
+/shareit/media/discs/{barcode} | PUT | Update an existing disc. (JSON only contains the data that is new, as well as the barcade)
 
 ## JSON Examples
 
