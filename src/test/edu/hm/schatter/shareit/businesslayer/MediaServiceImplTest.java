@@ -39,6 +39,13 @@ public class MediaServiceImplTest {
     }
 
     @Test
+    public void addingBookWithInvalidISBNReturnsINVALID_INFORMATION() {
+        final Book book = new Book("title", "author", "");
+        final MediaServiceResult result = mediaService.addBook(book);
+        assertEquals(result, MediaServiceResult.INVALID_INFORMATION);
+    }
+
+    @Test
     public void addingTheSameBookTwiceReturnsALREADY_EXISTS() {
         final Book book = new Book("title", "author", "isbn");
         mediaService.addBook(book);
@@ -63,6 +70,13 @@ public class MediaServiceImplTest {
     @Test
     public void addingDiscWithInvalidDirectorReturnsINVALID_INFORMATION() {
         final Disc disc = new Disc("title", "barcode", "", 0);
+        final MediaServiceResult result = mediaService.addDisc(disc);
+        assertEquals(result, MediaServiceResult.INVALID_INFORMATION);
+    }
+
+    @Test
+    public void addingDiscWithInvalidBarcodeReturnsINVALID_INFORMATION() {
+        final Disc disc = new Disc("title", "", "director", 0);
         final MediaServiceResult result = mediaService.addDisc(disc);
         assertEquals(result, MediaServiceResult.INVALID_INFORMATION);
     }

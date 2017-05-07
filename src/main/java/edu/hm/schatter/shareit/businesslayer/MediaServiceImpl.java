@@ -18,7 +18,7 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addBook(Book book) {
         final MediaServiceResult result;
 
-        if (book.getAuthor().equals("") || book.getTitle().equals("")) {
+        if (book.getAuthor().equals("") || book.getTitle().equals("") || book.getIsbn().equals("")) {
             result = MediaServiceResult.INVALID_INFORMATION;
 
         } else if (doesISBNexist(book.getIsbn())) {
@@ -57,7 +57,8 @@ public class MediaServiceImpl implements MediaService {
      */
     private boolean discHasValidInformation(Disc disc) {
         return !disc.getDirector().equals("") && !disc.getTitle().equals("")
-                && disc.getFsk() >= Disc.MIN_FSK && disc.getFsk() <= Disc.MAX_FSK;
+                && disc.getFsk() >= Disc.MIN_FSK && disc.getFsk() <= Disc.MAX_FSK
+                && !disc.getBarcode().equals("");
     }
 
     @Override
