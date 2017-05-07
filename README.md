@@ -16,7 +16,7 @@ URI | Method | Wirkung
 /shareit/media/discs | POST | Create a new disc.
 /shareit/media/discs/{barcode} | GET | Get a JSON reprentation of a certain disc.
 /shareit/media/discs | GET | List all discs in a JSON array.
-/shareit/media/discs/{barcode} | PUT | Update an existing disc. (JSON only contains the data that is new, as well as the barcade)
+/shareit/media/discs/{barcode} | PUT | Update an existing disc. (JSON only contains the data that is new, as well as the barcode)
 
 ## JSON Examples
 
