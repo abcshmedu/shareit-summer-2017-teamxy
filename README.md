@@ -6,6 +6,8 @@
 
 ## API Usage
 
+please note that ya TOKEN is required at the and of each URL. (e.g. ..media/books/YOUR_TOKEN)
+
 URI | Method | Wirkung
 --- | --- | ---
 /shareit/media/books | POST | Create a new book.

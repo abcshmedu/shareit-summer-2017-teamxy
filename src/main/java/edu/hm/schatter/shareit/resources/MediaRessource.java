@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.hm.schatter.shareit.businesslayer.MediaService;
 import edu.hm.schatter.shareit.businesslayer.MediaServiceImpl;
 import edu.hm.schatter.shareit.businesslayer.MediaServiceResult;
+import edu.hm.schatter.shareit.businesslayer.TokenChecker;
 import edu.hm.schatter.shareit.models.Book;
 import edu.hm.schatter.shareit.models.Disc;
 
@@ -29,15 +30,18 @@ public class MediaRessource {
     /**
      * Provides the API call for creating a book via a POST parameter.
      * @param book The book that is created. Built from JSON.
+     * @param token The token used to authorize the user calling the API.
      * @return Response containing further information on the success of the procedure.
      */
     @POST
-    @Path("/books")
+    @Path("/books/{token}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createBook(Book book) {
+    public Response createBook(Book book, @PathParam("token")String token) {
 
-        MediaServiceResult result = mediaService.addBook(book);
+        final MediaServiceResult result = TokenChecker.isValid(token)
+                ? mediaService.addBook(book)
+                : MediaServiceResult.UNAUTHORIZED;
 
         return Response
                 .status(result.getStatus())
@@ -49,15 +53,18 @@ public class MediaRessource {
      * Provides the API call for updating a book via a PUT parameter.
      * @param book The book containing the updated information. Built from JSON.
      * @param isbn The isbn of the book to be updated.
+     * @param token The token used to authorize the user calling the API.
      * @return Response containing further information on the success of the procedure.
      */
     @PUT
-    @Path("/books/{isbn}")
+    @Path("/books/{isbn}/{token}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateBook(Book book, @PathParam("isbn")String isbn) {
+    public Response updateBook(Book book, @PathParam("isbn")String isbn, @PathParam("token")String token) {
 
-        MediaServiceResult result = mediaService.updateBook(isbn, book);
+        final MediaServiceResult result = TokenChecker.isValid(token)
+                ? mediaService.updateBook(isbn, book)
+                : MediaServiceResult.UNAUTHORIZED;
 
         return Response
                 .status(result.getStatus())
@@ -67,23 +74,30 @@ public class MediaRessource {
 
     /**
      * Provides the API call for listing all the books currently available in the system.
+     * @param token The token used to authorize the user calling the API.
      * @return Response containing further information on the success of the procedure
      * including a JSON array of all books available in the system.
      */
     @GET
-    @Path("/books")
+    @Path("/books/{token}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBooks() {
+    public Response getBooks(@PathParam("token")String token) {
 
-        final Book[] books = mediaService.getBooks();
         MediaServiceResult result = MediaServiceResult.OK;
         String json = "";
 
-        try {
-            json = convertToJSON(books);
-        } catch (JsonProcessingException e) {
-            result = MediaServiceResult.ERROR;
+        if (TokenChecker.isValid(token)) {
+            final Book[] books = mediaService.getBooks();
+
+            try {
+                json = convertToJSON(books);
+            } catch (JsonProcessingException e) {
+                result = MediaServiceResult.ERROR;
+            }
+        } else {
+            result = MediaServiceResult.UNAUTHORIZED;
         }
+
 
         return Response
                 .status(result.getStatus())
@@ -94,25 +108,31 @@ public class MediaRessource {
     /**
      * Provides the API call for getting the JSON of a specific book.
      * @param isbn The isbn identifying the book.
+     * @param token The token used to authorize the user calling the API.
      * @return Response containing further information on the success of the procedure
      * including the data of the book in JSON format.
      */
     @GET
-    @Path("/books/{isbn}")
+    @Path("/books/{isbn}/{token}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBook(@PathParam("isbn")String isbn) {
+    public Response getBook(@PathParam("isbn")String isbn, @PathParam("token")String token) {
 
-        final Book book = mediaService.getBookByISBN(isbn);
-
-        MediaServiceResult result = book == null ? MediaServiceResult.NOT_FOUND : MediaServiceResult.OK;
+        MediaServiceResult result;
         String json = "";
 
-        if (result == MediaServiceResult.OK) {
-            try {
-                json = convertToJSON(book);
-            } catch (JsonProcessingException e) {
-                result = MediaServiceResult.ERROR;
+        if (TokenChecker.isValid(token)) {
+            final Book book = mediaService.getBookByISBN(isbn);
+            result = book == null ? MediaServiceResult.NOT_FOUND : MediaServiceResult.OK;
+
+            if (result == MediaServiceResult.OK) {
+                try {
+                    json = convertToJSON(book);
+                } catch (JsonProcessingException e) {
+                    result = MediaServiceResult.ERROR;
+                }
             }
+        } else {
+            result = MediaServiceResult.UNAUTHORIZED;
         }
 
         return Response
@@ -124,25 +144,30 @@ public class MediaRessource {
     /**
      * Provides the API call for getting the JSON of a specific disc.
      * @param barcode The barcode identifying the disc.
+     * @param token The token used to authorize the user calling the API.
      * @return Response containing further information on the success of the procedure
      * including the data of the disc in JSON format.
      */
     @GET
-    @Path("/discs/{barcode}")
+    @Path("/discs/{barcode}/{token}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDiscs(@PathParam("barcode") String barcode) {
-
-        final Disc disc = mediaService.getDiscByBarcode(barcode);
-
-        MediaServiceResult result = disc == null ? MediaServiceResult.NOT_FOUND : MediaServiceResult.OK;
+    public Response getDiscs(@PathParam("barcode") String barcode, @PathParam("token")String token) {
+        MediaServiceResult result;
         String json = "";
 
-        if (result == MediaServiceResult.OK) {
-            try {
-                json = convertToJSON(disc);
-            } catch (JsonProcessingException e) {
-                result = MediaServiceResult.ERROR;
+        if (TokenChecker.isValid(token)) {
+            final Disc disc = mediaService.getDiscByBarcode(barcode);
+            result = disc == null ? MediaServiceResult.NOT_FOUND : MediaServiceResult.OK;
+
+            if (result == MediaServiceResult.OK) {
+                try {
+                    json = convertToJSON(disc);
+                } catch (JsonProcessingException e) {
+                    result = MediaServiceResult.ERROR;
+                }
             }
+        } else {
+            result = MediaServiceResult.UNAUTHORIZED;
         }
 
         return Response
@@ -153,23 +178,26 @@ public class MediaRessource {
 
     /**
      * Provides the API call for listing all the discs currently available in the system.
+     * @param token The token used to authorize the user calling the API.
      * @return Response containing further information on the success of the procedure
      * including a JSON array of all discs available in the system.
      */
     @GET
-    @Path("/discs")
+    @Path("/discs/{token}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDiscs() {
-
-        final Disc[] discs = mediaService.getDiscs();
-
+    public Response getDiscs(@PathParam("token")String token) {
         MediaServiceResult result = MediaServiceResult.OK;
         String json = "";
 
-        try {
-            json = convertToJSON(discs);
-        } catch (JsonProcessingException e) {
-            result = MediaServiceResult.ERROR;
+        if (TokenChecker.isValid(token)) {
+            try {
+                final Disc[] discs = mediaService.getDiscs();
+                json = convertToJSON(discs);
+            } catch (JsonProcessingException e) {
+                result = MediaServiceResult.ERROR;
+            }
+        } else {
+            result = MediaServiceResult.UNAUTHORIZED;
         }
 
         return Response
@@ -180,15 +208,18 @@ public class MediaRessource {
 
     /**
      * Provides the API call for creating a disc via a POST parameter.
+     * @param token The token used to authorize the user calling the API.
      * @param disc The disc that is created. Built from JSON.
      * @return Response containing further information on the success of the procedure.
      */
     @POST
-    @Path("/discs")
+    @Path("/discs/{token}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDisc(Disc disc) {
-        MediaServiceResult result = mediaService.addDisc(disc);
+    public Response createDisc(Disc disc, @PathParam("token")String token) {
+        final MediaServiceResult result = TokenChecker.isValid(token)
+                ? mediaService.addDisc(disc)
+                : MediaServiceResult.UNAUTHORIZED;
 
         return Response
                 .status(result.getStatus())
@@ -198,16 +229,19 @@ public class MediaRessource {
 
     /**
      * Provides the API call for updating a disc via a PUT parameter.
+     * @param token The token used to authorize the user calling the API.
      * @param disc The disc containing the updated information. Built from JSON.
      * @param barcode The barcode of the book to be updated.
      * @return Response containing further information on the success of the procedure.
      */
     @PUT
-    @Path("/discs/{barcode}")
+    @Path("/discs/{barcode}/{token}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateDisc(Disc disc, @PathParam("barcode")String barcode) {
-        MediaServiceResult result = mediaService.updateDisc(barcode, disc);
+    public Response updateDisc(Disc disc, @PathParam("barcode")String barcode, @PathParam("token")String token) {
+        final MediaServiceResult result = TokenChecker.isValid(token)
+                ? mediaService.updateDisc(barcode, disc)
+                : MediaServiceResult.UNAUTHORIZED;
 
         return Response
                 .status(result.getStatus())

@@ -10,6 +10,7 @@ public enum MediaServiceResult {
     ALREADY_EXISTS(400, "The entity you wanted to create already exists.", Response.Status.BAD_REQUEST),
     INVALID_INFORMATION(400, "The information you provided is invalid.", Response.Status.BAD_REQUEST),
     MISSING_INFORMATION(400, "Some required information is missing. (e.g.: title, author, etc.)", Response.Status.NOT_FOUND),
+    UNAUTHORIZED(403, "The specified token is invalid or the auth server is unreachable.", Response.Status.UNAUTHORIZED),
     NOT_FOUND(404, "The requested resource could not be found.", Response.Status.BAD_REQUEST),
     ERROR(500, "Internal Server Error.", Response.Status.INTERNAL_SERVER_ERROR);
 
