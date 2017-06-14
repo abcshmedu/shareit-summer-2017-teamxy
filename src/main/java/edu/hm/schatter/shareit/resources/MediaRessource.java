@@ -9,6 +9,7 @@ import edu.hm.schatter.shareit.businesslayer.TokenChecker;
 import edu.hm.schatter.shareit.models.Book;
 import edu.hm.schatter.shareit.models.Disc;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
@@ -25,7 +26,12 @@ import javax.ws.rs.core.Response;
 @Path("/media")
 public class MediaRessource {
 
-    private final MediaService mediaService = new MediaServiceImpl();
+    private final MediaService mediaService;
+
+    @Inject
+    public MediaRessource(MediaService mediaService) {
+        this.mediaService = mediaService;
+    }
 
     /**
      * Provides the API call for creating a book via a POST parameter.
