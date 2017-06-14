@@ -21,7 +21,8 @@ public final class TokenChecker {
     /**
      * Current URL of the auth server.
      */
-    private static final String AUTH_SERVER_URL = "https://auth-teamxy.herokuapp.com/check/";
+    //private static final String AUTH_SERVER_URL = "https://auth-teamxy.herokuapp.com/check/";
+    private static final String AUTH_SERVER_URL = "http://localhost:8082/check/";
 
     /**
      * Checks whether a token is valid by asking the auth server.

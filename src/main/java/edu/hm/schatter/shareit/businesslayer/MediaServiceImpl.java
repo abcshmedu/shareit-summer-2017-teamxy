@@ -18,14 +18,16 @@ public class MediaServiceImpl implements MediaService {
     public MediaServiceResult addBook(Book book) {
         final MediaServiceResult result;
 
-        if (book.getAuthor().equals("") || book.getTitle().equals("") || book.getIsbn().equals("")) {
+        if (book.getAuthor().equals("") || book.getTitle().equals("") || book.getIsbn().equals("") || !ISBNChecker.isValid(book.getIsbn())) {
             result = MediaServiceResult.INVALID_INFORMATION;
 
         } else if (doesISBNexist(book.getIsbn())) {
             result = MediaServiceResult.ALREADY_EXISTS;
 
         } else {
-            BOOKS.add(book);
+            final String isbn = book.getIsbn().replaceAll("-", "");
+            final Book newBook = new Book(book.getTitle(), book.getAuthor(), isbn);
+            BOOKS.add(newBook);
             result = MediaServiceResult.OK;
         }
 
@@ -74,9 +76,10 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public MediaServiceResult updateBook(String isbn, Book book) {
         final MediaServiceResult result;
+        isbn = isbn == null ? "" : isbn.replaceAll("-", "");
         final Book bookToBeUpdated = getBookByISBN(isbn);
 
-        if (!book.getIsbn().equals(isbn)) {
+        if (!book.getIsbn().equals(isbn) || !ISBNChecker.isValid(book.getIsbn()) || !ISBNChecker.isValid(isbn)) {
             result = MediaServiceResult.INVALID_INFORMATION;
 
         } else if (bookToBeUpdated == null) {
@@ -128,6 +131,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Book getBookByISBN(String isbn) {
+        isbn = isbn.replaceAll("-", "");
         for (Book book : BOOKS) {
             if (book.getIsbn().equals(isbn)) {
                 return book;
@@ -152,6 +156,7 @@ public class MediaServiceImpl implements MediaService {
      * @return Whether the ISBN exists.
      */
     private boolean doesISBNexist(String isbn) {
+        isbn = isbn.replaceAll("-", "");
         return getBookByISBN(isbn) != null;
     }
 
