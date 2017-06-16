@@ -2,17 +2,27 @@ package edu.hm.schatter.shareit.businesslayer;
 
 import edu.hm.schatter.shareit.models.Book;
 import edu.hm.schatter.shareit.models.Disc;
+import edu.hm.schatter.shareit.persistence.MediaPersistence;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 
 /**
  * Implementation for the media service interface.
  */
 public class MediaServiceImpl implements MediaService {
 
-    private static final List<Book> BOOKS = new ArrayList<>();
-    private static final List<Disc> DISCS = new ArrayList<>();
+    private final MediaPersistence mediaPersistence;
+
+    /**
+     * Injection constructor.
+     * @param mediaPersistence Media persistence.
+     */
+    @Inject
+    public MediaServiceImpl(MediaPersistence mediaPersistence)
+    {
+        this.mediaPersistence = mediaPersistence;
+    }
+
 
     @Override
     public MediaServiceResult addBook(Book book) {
@@ -27,7 +37,8 @@ public class MediaServiceImpl implements MediaService {
         } else {
             final String isbn = book.getIsbn().replaceAll("-", "");
             final Book newBook = new Book(book.getTitle(), book.getAuthor(), isbn);
-            BOOKS.add(newBook);
+
+            mediaPersistence.createBook(newBook);
             result = MediaServiceResult.OK;
         }
 
@@ -45,7 +56,7 @@ public class MediaServiceImpl implements MediaService {
             result = MediaServiceResult.ALREADY_EXISTS;
 
         } else {
-            DISCS.add(disc);
+            mediaPersistence.createDisc(disc);
             result = MediaServiceResult.OK;
         }
 
@@ -65,12 +76,12 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Book[] getBooks() {
-        return BOOKS.toArray(new Book[BOOKS.size()]);
+        return mediaPersistence.getBooks();
     }
 
     @Override
     public Disc[] getDiscs() {
-        return DISCS.toArray(new Disc[DISCS.size()]);
+        return mediaPersistence.getDiscs();
     }
 
     @Override
@@ -93,8 +104,7 @@ public class MediaServiceImpl implements MediaService {
             result = MediaServiceResult.ALREADY_EXISTS;
 
         } else {
-            BOOKS.remove(bookToBeUpdated);
-            BOOKS.add(new Book(book.getTitle(), book.getAuthor(), isbn));
+            mediaPersistence.updateBook(isbn, new Book(book.getTitle(), book.getAuthor(), isbn));
             result = MediaServiceResult.OK;
         }
 
@@ -121,8 +131,7 @@ public class MediaServiceImpl implements MediaService {
             result = MediaServiceResult.ALREADY_EXISTS;
 
         } else {
-            DISCS.remove(discToBeUpdated);
-            DISCS.add(new Disc(disc.getTitle(), barcode, disc.getDirector(), disc.getFsk()));
+            mediaPersistence.updateDisc(barcode, new Disc(disc.getTitle(), barcode, disc.getDirector(), disc.getFsk()));
             result = MediaServiceResult.OK;
         }
 
@@ -132,7 +141,11 @@ public class MediaServiceImpl implements MediaService {
     @Override
     public Book getBookByISBN(String isbn) {
         isbn = isbn.replaceAll("-", "");
-        for (Book book : BOOKS) {
+
+        // TODO
+        final Book[] books = mediaPersistence.getBooks();
+
+        for (Book book : books) {
             if (book.getIsbn().equals(isbn)) {
                 return book;
             }
@@ -142,7 +155,10 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Disc getDiscByBarcode(String barcode) {
-        for (Disc disc : DISCS) {
+        // TODO
+        final Disc[] discs = mediaPersistence.getDiscs();
+
+        for (Disc disc : discs) {
             if (disc.getBarcode().equals(barcode)) {
                 return disc;
             }
@@ -167,13 +183,5 @@ public class MediaServiceImpl implements MediaService {
      */
     private boolean doesBarcodeExist(String barcode) {
         return getDiscByBarcode(barcode) != null;
-    }
-
-    /**
-     * Resets the storage. Needed for testing.
-     */
-    void resetStorage() {
-        BOOKS.clear();
-        DISCS.clear();
     }
 }

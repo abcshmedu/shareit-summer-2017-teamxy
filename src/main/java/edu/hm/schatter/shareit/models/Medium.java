@@ -1,9 +1,20 @@
 package edu.hm.schatter.shareit.models;
 
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * Data strucutre representing a medium.
  */
-public abstract class Medium {
+@Entity
+@Table(name = "TMedium")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Medium implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
     private final String title;
 
     /**

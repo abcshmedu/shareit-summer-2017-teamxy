@@ -11,13 +11,7 @@ import java.net.URL;
 /**
  * Utility for checking tokens.
  */
-public final class TokenChecker {
-    /**
-     * Private useless constructor.
-     */
-    private TokenChecker() {
-    }
-
+public class TokenChecker {
     /**
      * Current URL of the auth server.
      */
@@ -29,7 +23,7 @@ public final class TokenChecker {
      * @param token The token to be checked.
      * @return Whether the token is valid.
      */
-    public static boolean isValid(String token) {
+    public boolean isValid(String token) {
         String authServerResponse = sendToAuthServer(token);
 
         if (authServerResponse == null) {
@@ -45,7 +39,7 @@ public final class TokenChecker {
      * @param token The token to be sent.
      * @return The response of the auth server.
      */
-    private static String sendToAuthServer(String token) {
+    private String sendToAuthServer(String token) {
         HttpURLConnection connection = null;
 
         try {

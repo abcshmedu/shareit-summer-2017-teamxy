@@ -17,7 +17,7 @@ public class MediaServiceResultTest {
     @Test
     public void correctJSONforALREADY_EXISTS() {
         final String json = MediaServiceResult.ALREADY_EXISTS.getJSON();
-        final String expectedJSON = "{\"code\": 400, \"detail\": \"The entity you wanted to create already exists.\"}";
+        final String expectedJSON = "{\"code\": 400, \"detail\": \"The entity you wanted to createBook already exists.\"}";
 
         assertEquals(expectedJSON, json);
     }

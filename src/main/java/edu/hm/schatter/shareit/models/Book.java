@@ -1,11 +1,20 @@
 package edu.hm.schatter.shareit.models;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 /**
  * A data structure representing a book.
  */
+@Entity
 public class Book extends Medium {
     private final String author;
-    private final String isbn;
+
+    //@OneToOne(cascade = CascadeType.ALL)
+    //@JoinColumn(name = "BOOK_ISBN", unique = true, updatable = false)
+    private String isbn;
 
     /**
      * Private standard constructor needed for reflection.

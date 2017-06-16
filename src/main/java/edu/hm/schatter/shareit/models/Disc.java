@@ -1,8 +1,11 @@
 package edu.hm.schatter.shareit.models;
 
+import javax.persistence.Entity;
+
 /**
  * A data structure representing a disc.
  */
+@Entity
 public class Disc extends Medium {
     public static final int MIN_FSK = 0;
     public static final int MAX_FSK = 18;

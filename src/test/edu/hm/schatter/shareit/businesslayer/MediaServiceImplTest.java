@@ -2,26 +2,55 @@ package edu.hm.schatter.shareit.businesslayer;
 
 import edu.hm.schatter.shareit.models.Book;
 import edu.hm.schatter.shareit.models.Disc;
+import edu.hm.schatter.shareit.persistence.MediaPersistence;
+import edu.hm.schatter.shareit.persistence.MediaPersistenceImpl;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class MediaServiceImplTest {
 
-    private final MediaService mediaService = new MediaServiceImpl();
+    private MediaService mediaService;
+    private MediaPersistence mediaPersistence;
+
+    @Before
+    public void setUp() {
+        mediaPersistence = new MediaPersistenceMock();
+        mediaService = new MediaServiceImpl(mediaPersistence);
+    }
 
     @After
-    public void resetStorage() {
-        MediaServiceImpl mediaServiceImpl = (MediaServiceImpl) mediaService;
-        mediaServiceImpl.resetStorage();
+    public void tearDown() {
+        ((MediaPersistenceMock)mediaPersistence).resetStorage();
     }
 
     @Test
     public void addingValidBookReturnsOK() {
-        final Book book = new Book("title", "author", "isbn");
+        final Book book = new Book("title", "author", "9781891830754");
         final MediaServiceResult result = mediaService.addBook(book);
         assertEquals(result, MediaServiceResult.OK);
+    }
+
+    @Test
+    public void addingSameISBNwithDashesReturnsALREADY_EXISTS() {
+        Book book = new Book("title", "author", "9781891830754");
+        mediaService.addBook(book);
+
+        book = new Book("title", "author", "9-78-18-9------18-30-754");
+        final MediaServiceResult result = mediaService.addBook(book);
+        assertEquals(MediaServiceResult.ALREADY_EXISTS, result);
+    }
+
+    @Test
+    public void getBookByISBNwithDashesReturnsBook() {
+        final Book book = new Book("title", "author", "9781891830754");
+        mediaService.addBook(book);
+
+        final Book returnedBook = mediaService.getBookByISBN("97-8189-1830-75-4");
+
+        assertEquals(book, returnedBook);
     }
 
     @Test
@@ -47,10 +76,10 @@ public class MediaServiceImplTest {
 
     @Test
     public void addingTheSameBookTwiceReturnsALREADY_EXISTS() {
-        final Book book = new Book("title", "author", "isbn");
+        final Book book = new Book("title", "author", "9781891830754");
         mediaService.addBook(book);
         final MediaServiceResult result = mediaService.addBook(book);
-        assertEquals(result, MediaServiceResult.ALREADY_EXISTS);
+        assertEquals(MediaServiceResult.ALREADY_EXISTS, result);
     }
 
     @Test
@@ -97,28 +126,12 @@ public class MediaServiceImplTest {
 
     @Test
     public void getBooksSingleItem() {
-        final Book book = new Book("title", "author", "isbn");
+        final Book book = new Book("title", "author", "9781891830754");
         mediaService.addBook(book);
 
         final Book[] books = mediaService.getBooks();
         assertEquals(books.length, 1);
         assertEquals(books[0], book);
-    }
-
-    @Test
-    public void getBooks100Items() {
-        for(int i = 0; i < 100; i++) {
-            final Book book = new Book("title", "author", "isbn"+i);
-            mediaService.addBook(book);
-        }
-
-        final Book[] books = mediaService.getBooks();
-        assertEquals(books.length, 100);
-
-        for(int i = 0; i < 100; i++) {
-            final Book expectedBook = new Book("title", "author", "isbn"+i);
-            assertEquals(books[i], expectedBook);
-        }
     }
 
     @Test
@@ -155,7 +168,7 @@ public class MediaServiceImplTest {
 
     @Test
     public void updatingBookReturnsOK() {
-        final String isbn = "isbn";
+        final String isbn = "9781891830754";
         final Book book = new Book("title", "author", isbn);
         mediaService.addBook(book);
 
@@ -167,7 +180,7 @@ public class MediaServiceImplTest {
 
     @Test
     public void updatingBookWithoutTitleReturnsMISSING_INFORMATION() {
-        final String isbn = "isbn";
+        final String isbn = "9781891830754";
         final Book book = new Book("title", "author", isbn);
         mediaService.addBook(book);
 
@@ -179,7 +192,7 @@ public class MediaServiceImplTest {
 
     @Test
     public void updatingBookWithoutAuthorReturnsMISSING_INFORMATION() {
-        final String isbn = "isbn";
+        final String isbn = "9781891830754";
         final Book book = new Book("title", "author", isbn);
         mediaService.addBook(book);
 
@@ -203,7 +216,7 @@ public class MediaServiceImplTest {
 
     @Test
     public void updatingBookThatDoesNotExistReturnsNOT_FOUND() {
-        final String isbn = "isbn";
+        final String isbn = "9781891830754";
         final Book updatedBook = new Book("", "updated author", isbn);
         final MediaServiceResult result = mediaService.updateBook(isbn, updatedBook);
 
@@ -212,7 +225,7 @@ public class MediaServiceImplTest {
 
     @Test
     public void updatingBookWithSameBookReturnsALREADY_EXISTS() {
-        final String isbn = "isbn";
+        final String isbn = "9781891830754";
         final Book book = new Book("title", "author", isbn);
         mediaService.addBook(book);
         final MediaServiceResult result = mediaService.updateBook(isbn, book);
@@ -292,7 +305,7 @@ public class MediaServiceImplTest {
 
     @Test
     public void getBookByISBNreturnsBook() {
-        final String isbn = "isbn";
+        final String isbn = "9781891830754";
         final Book book = new Book("title", "author", isbn);
         mediaService.addBook(book);
 
@@ -322,7 +335,6 @@ public class MediaServiceImplTest {
     @Test
     public void getDiscByBarcodeReturnsNullIfDiscDoesNotExist() {
         final Disc returnedDisc = mediaService.getDiscByBarcode("barcode");
-
         assertNull(returnedDisc);
     }
 }

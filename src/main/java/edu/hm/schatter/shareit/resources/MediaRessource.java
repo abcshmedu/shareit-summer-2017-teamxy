@@ -3,7 +3,6 @@ package edu.hm.schatter.shareit.resources;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.hm.schatter.shareit.businesslayer.MediaService;
-import edu.hm.schatter.shareit.businesslayer.MediaServiceImpl;
 import edu.hm.schatter.shareit.businesslayer.MediaServiceResult;
 import edu.hm.schatter.shareit.businesslayer.TokenChecker;
 import edu.hm.schatter.shareit.models.Book;
@@ -27,10 +26,26 @@ import javax.ws.rs.core.Response;
 public class MediaRessource {
 
     private final MediaService mediaService;
+    private final TokenChecker tokenChecker;
 
+    /**
+     * Injection constructor.
+     * @param mediaService injected media service.
+     */
     @Inject
     public MediaRessource(MediaService mediaService) {
         this.mediaService = mediaService;
+        this.tokenChecker = new TokenChecker();
+    }
+
+    /**
+     * Testing Constructor.
+     * @param mediaService mock.
+     * @param tokenChecker mock.
+     */
+    public MediaRessource(MediaService mediaService, TokenChecker tokenChecker) {
+        this.mediaService = mediaService;
+        this.tokenChecker = tokenChecker;
     }
 
     /**
@@ -45,7 +60,7 @@ public class MediaRessource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBook(Book book, @PathParam("token")String token) {
 
-        final MediaServiceResult result = TokenChecker.isValid(token)
+        final MediaServiceResult result = tokenChecker.isValid(token)
                 ? mediaService.addBook(book)
                 : MediaServiceResult.UNAUTHORIZED;
 
@@ -68,7 +83,7 @@ public class MediaRessource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateBook(Book book, @PathParam("isbn")String isbn, @PathParam("token")String token) {
 
-        final MediaServiceResult result = TokenChecker.isValid(token)
+        final MediaServiceResult result = tokenChecker.isValid(token)
                 ? mediaService.updateBook(isbn, book)
                 : MediaServiceResult.UNAUTHORIZED;
 
@@ -92,7 +107,7 @@ public class MediaRessource {
         MediaServiceResult result = MediaServiceResult.OK;
         String json = "";
 
-        if (TokenChecker.isValid(token)) {
+        if (tokenChecker.isValid(token)) {
             final Book[] books = mediaService.getBooks();
 
             try {
@@ -126,7 +141,7 @@ public class MediaRessource {
         MediaServiceResult result;
         String json = "";
 
-        if (TokenChecker.isValid(token)) {
+        if (tokenChecker.isValid(token)) {
             final Book book = mediaService.getBookByISBN(isbn);
             result = book == null ? MediaServiceResult.NOT_FOUND : MediaServiceResult.OK;
 
@@ -161,7 +176,7 @@ public class MediaRessource {
         MediaServiceResult result;
         String json = "";
 
-        if (TokenChecker.isValid(token)) {
+        if (tokenChecker.isValid(token)) {
             final Disc disc = mediaService.getDiscByBarcode(barcode);
             result = disc == null ? MediaServiceResult.NOT_FOUND : MediaServiceResult.OK;
 
@@ -195,7 +210,7 @@ public class MediaRessource {
         MediaServiceResult result = MediaServiceResult.OK;
         String json = "";
 
-        if (TokenChecker.isValid(token)) {
+        if (tokenChecker.isValid(token)) {
             try {
                 final Disc[] discs = mediaService.getDiscs();
                 json = convertToJSON(discs);
@@ -223,7 +238,7 @@ public class MediaRessource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDisc(Disc disc, @PathParam("token")String token) {
-        final MediaServiceResult result = TokenChecker.isValid(token)
+        final MediaServiceResult result = tokenChecker.isValid(token)
                 ? mediaService.addDisc(disc)
                 : MediaServiceResult.UNAUTHORIZED;
 
@@ -245,7 +260,7 @@ public class MediaRessource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateDisc(Disc disc, @PathParam("barcode")String barcode, @PathParam("token")String token) {
-        final MediaServiceResult result = TokenChecker.isValid(token)
+        final MediaServiceResult result = tokenChecker.isValid(token)
                 ? mediaService.updateDisc(barcode, disc)
                 : MediaServiceResult.UNAUTHORIZED;
 
